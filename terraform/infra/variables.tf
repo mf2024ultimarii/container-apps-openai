@@ -173,3 +173,11 @@ variable "workload_managed_identity_name" {
   type = string
   default = "WorkloadIdentity"
 }
+
+variable "azure_subscription_id" {
+  type = string
+}
+
+variable "azure_tenant_id" {
+  type = string
+}

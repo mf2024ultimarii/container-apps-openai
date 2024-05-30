@@ -1,13 +1,16 @@
 #!/bin/bash
 
+CMD="tofu"
+# CMD="terraform"
+
 # Terraform Init
-terraform init
+${CMD} init
 
 # Terraform validate
-terraform validate -compact-warnings
+${CMD} validate -compact-warnings
 
 # Terraform plan
-terraform plan -compact-warnings
+${CMD} plan -compact-warnings
 
 # Terraform apply
-terraform apply -compact-warnings
+${CMD} apply -compact-warnings
