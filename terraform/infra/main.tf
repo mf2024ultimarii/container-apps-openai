@@ -30,6 +30,24 @@ resource "azurerm_resource_group" "rg" {
   tags     = var.tags
 }
 
+resource "azurerm_storage_account" "rg" {
+  name                     = "rg${random_string.prefix.hex}"
+  resource_group_name      = azurerm_resource_group.rg.name
+  location                 = var.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+  tags = var.tags
+}
+
+resource "azurerm_storage_container" "documine_storage_container" {
+  name  = "${var.name_prefix}-sc-1"
+
+  storage_account_name  = azurerm_storage_account.rg.name
+  container_access_type = "private"
+  depends_on            = [azurerm_storage_account.rg]
+}
+
 module "log_analytics_workspace" {
   source                           = "./modules/log_analytics"
   name                             = var.name_prefix == null ? "${random_string.prefix.result}${var.log_analytics_workspace_name}" : "${var.name_prefix}${var.log_analytics_workspace_name}"
@@ -143,7 +161,6 @@ module "container_registry" {
   log_analytics_workspace_id   = module.log_analytics_workspace.id
   log_analytics_retention_days = var.log_analytics_retention_days
   tags                         = var.tags
-
 }
 
 module "workload_managed_identity" {
